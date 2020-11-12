@@ -36,9 +36,9 @@ export default function ${_componentName(name)}(props) {
   const classes = ${_componentName(name)}Styles()
 
   return (
-    <${_componentName(name)}>
-      
-    </${_componentName(name)}>
+    <div>
+        ${_componentName(name)}
+    </div>
   )
 }
 
