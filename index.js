@@ -3,12 +3,21 @@ var fs = require('fs');
 const COMPONENTS_DIR = './components/_mui/';
 
 function _createFile(name, data, extension='.js'){
-    dir =  COMPONENTS_DIR;
+    const dir =  COMPONENTS_DIR;
     const path = dir + _componentName(name) + '/' + _componentName(name) + extension
     fs.writeFile(path, data, { flag: 'wx' }, function (err) {
         if (err) throw err;
         console.log('✅ "' + path + '" is created');
     });    
+}
+function _createExportFile(componentName){
+  const dir =  COMPONENTS_DIR;
+  const path = dir + _componentName(componentName) + '/index.js'
+  const data = `export {default} from './${componentName}'`
+  fs.writeFile(path, data, { flag: 'wx' }, function (err) {
+    if (err) throw err;
+    console.log('✅ "' + path + '" is created');
+  });    
 }
 
 function _componentName(name){
@@ -24,6 +33,7 @@ function createModule(name){
     _createFile(name, reactBoilerPlate(name));
     _createFile(name, styleBoilerPlate(name), '.styles.js');
     _createFile(name, storyBoilerPlate(name), '.stories.js');
+    _createExportFile(name);
 }
 
 const reactBoilerPlate = name => `import PropTypes from 'prop-types'
@@ -88,6 +98,7 @@ WithContent.args = {
   title: 'My title for ${_componentName(name)}.',
 }
 WithContent.storyName = '${_componentName(name)}'`;
+
 
 const [method] = process.argv.slice(2);
 if(!method){
