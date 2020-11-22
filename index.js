@@ -1,17 +1,16 @@
 var fs = require('fs');
 
 const COMPONENTS_DIR = './components/_mui/';
+const MODULES_DIR = './modules/';
 
-function _createFile(name, data, extension='.js'){
-    const dir =  COMPONENTS_DIR;
+function _createFile(dir, name, data, extension='.js'){
     const path = dir + _componentName(name) + '/' + _componentName(name) + extension
     fs.writeFile(path, data, { flag: 'wx' }, function (err) {
         if (err) throw err;
         console.log('✅ "' + path + '" is created');
     });    
 }
-function _createExportFile(componentName){
-  const dir =  COMPONENTS_DIR;
+function _createExportFile(dir, componentName){
   const path = dir + _componentName(componentName) + '/index.js'
   const data = `export {default} from './${componentName}'`
   fs.writeFile(path, data, { flag: 'wx' }, function (err) {
@@ -24,17 +23,19 @@ function _componentName(name){
     return name.charAt(0).toUpperCase() + name.slice(1);
 } 
 
-function createModule(name){
-    var dir = `${COMPONENTS_DIR}/${_componentName(name)}`;
-
+function abstractFactory(directory, name){
+    var dir = `${directory}/${_componentName(name)}`;
     if (!fs.existsSync(dir)){
         fs.mkdirSync(dir);
     }
-    _createFile(name, reactBoilerPlate(name));
-    _createFile(name, styleBoilerPlate(name), '.styles.js');
-    _createFile(name, storyBoilerPlate(name), '.stories.js');
-    _createExportFile(name);
+    _createFile(directory, name, reactBoilerPlate(name));
+    _createFile(directory, name, styleBoilerPlate(name), '.styles.js');
+    _createFile(directory, name, storyBoilerPlate(name), '.stories.js');
+    _createExportFile(directory, name);
 }
+
+const createComponent = abstractFactory.bind(null, COMPONENTS_DIR);
+const createModule = abstractFactory.bind(null, MODULES_DIR);
 
 const reactBoilerPlate = name => `import PropTypes from 'prop-types'
 import React from 'react'
@@ -101,13 +102,27 @@ WithContent.storyName = '${_componentName(name)}'`;
 
 
 const [method] = process.argv.slice(2);
+const [type] = process.argv.slice(3);
 if(!method){
-    throw new Error('Method is required'); 
+    throw new Error(`Method is required. 'create' is available. Use is like yt-cli {method} {type} {name}`); 
+} 
+if(!type){
+  throw new Error(`Type is required. Use 'component' or 'module'`); 
 } 
 if(method === 'create'){
-    const [name] = process.argv.slice(3);
+    const [name] = process.argv.slice(4);
     if(!name) throw new Error('You must provide a name'); 
-    createModule(name)  
+    switch(type){
+      case 'module': 
+        createModule(name)  
+      break;
+      case 'component': 
+        createComponent(name)  
+        break;
+      default:
+        throw new Error(`The method ${method} with type ${type} is invalid`)
+    }
+    
 }else{
     console.error(`"${method}" is not a method. Use "create"`); 
 }
