@@ -85,7 +85,7 @@ const storyBoilerPlate = name =>`import React from 'react'
 import ${_componentName(name)} from './${_componentName(name)}'
 
 export default {
-  title: '',
+  title: 'Component/${_componentName(name)}',
   component: ${_componentName(name)},
   argTypes: {
     title: { control: 'text' },
