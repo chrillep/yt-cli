@@ -62,22 +62,21 @@ ${_componentName(name)}.propTypes = {
 
 const styleBoilerPlate = name => `import { makeStyles } from '@material-ui/core/styles'
 
-const ${_componentName(name)}Styles = () => {
-  return makeStyles(theme => {
-    const mq = theme.breakpoints.up
-    const space = theme.spacing
-    return {
-      root: {
-          [mq('lg')]: {
-            
-          },
-          [mq('xl')]: {
-            
-          },
+const ${_componentName(name)}Styles = makeStyles(theme => {
+  const mq = theme.breakpoints.up
+  const space = theme.spacing
+  return {
+    root: {
+        [mq('lg')]: {
+          
         },
-      }
-  })();
-}
+        [mq('xl')]: {
+          
+        },
+      },
+    }
+});
+
 export default ${_componentName(name)}Styles`;
 
 const storyBoilerPlate = name =>`import React from 'react'
