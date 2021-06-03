@@ -12,7 +12,7 @@ function _createFile(dir, name, data, extension='.js'){
 }
 function _createExportFile(dir, componentName){
   const path = dir + _componentName(componentName) + '/index.js'
-  const data = `export {default} from './${componentName}'`
+  const data = `export { default } from './${componentName}'`
   fs.writeFile(path, data, { flag: 'wx' }, function (err) {
     if (err) throw err;
     console.log('✅ "' + path + '" is created');
@@ -43,7 +43,7 @@ import React from 'react'
 import ${_componentName(name)}Styles from './${_componentName(name)}.styles'
 
 export default function ${_componentName(name)}(props) {
-  const {childrent} = props
+  const { children } = props
   const classes = ${_componentName(name)}Styles()
 
   return (
