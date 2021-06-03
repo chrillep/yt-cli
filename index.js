@@ -43,7 +43,7 @@ import React from 'react'
 import ${_componentName(name)}Styles from './${_componentName(name)}.styles'
 
 export default function ${_componentName(name)}(props) {
-  const {childrent} = props
+  const {children} = props
   const classes = ${_componentName(name)}Styles()
 
   return (
